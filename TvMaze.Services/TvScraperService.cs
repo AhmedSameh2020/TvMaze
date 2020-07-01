@@ -35,13 +35,16 @@ namespace TvMaze.Services
                 try
                 {
                     return JsonConvert.DeserializeObject<List<CastJson>>(response)
-    .Select(p => p.Person)
-    .ToList();
+                            .Select(p => p.Person)
+                            .ToList();
                 }
                 catch (Exception ex)
                 {
-
-                    throw;
+                    if (ex.Message.Contains("429"))
+                    {
+                        System.Threading.Thread.Sleep(2000);
+                    }
+                    return await GetShowCast(showId);
                 }
 
             }
